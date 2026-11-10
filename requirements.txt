@@ -1,0 +1,15 @@
+# LangChain integrations used by pdf_chat.py
+langchain-community
+langchain-core
+langchain-text-splitters
+langchain-openai
+langchain-chroma
+langchain-huggingface
+
+# PDF loading and local embeddings
+pypdf
+sentence-transformers
+
+# Web UI and environment configuration
+gradio
+python-dotenv
