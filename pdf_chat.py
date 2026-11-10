@@ -1,17 +1,14 @@
-# pip install langchain langchain-openai langchain-chroma langchain-huggingface \
-#             langchain-community pypdf sentence-transformers gradio python-dotenv
-
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_chroma import Chroma
 
 def build_index(pdf_path):
-    pages    = PyPDFLoader(pdf_path).load()                    # ① read all pages
+    pages    = PyPDFLoader(pdf_path).load()                    # read all pages
     splitter = RecursiveCharacterTextSplitter(chunk_size=800, chunk_overlap=100)
-    chunks   = splitter.split_documents(pages)                # ② chunk them
+    chunks   = splitter.split_documents(pages)                # chunk them
     embedder = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-    db       = Chroma.from_documents(chunks, embedder)         # ③ in-memory store
+    db       = Chroma.from_documents(chunks, embedder)         # in-memory store
     return db
 
 from langchain_openai import ChatOpenAI
@@ -41,10 +38,10 @@ def ask(db, question):
 
 import gradio as gr
 
-state = {"db": None}                    # ① remember the index across turns
+state = {"db": None}                    # remember the index across turns
 
 def upload(pdf):
-    state["db"] = build_index(pdf.name)   # ② re-index whenever a new PDF arrives
+    state["db"] = build_index(pdf.name)   # re-index whenever a new PDF arrives
     return "PDF indexed! Ask me anything about it."
 
 def chat(message, history):
